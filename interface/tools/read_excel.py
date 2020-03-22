@@ -1,6 +1,6 @@
 from openpyxl import load_workbook
 import os
-from project_path import data_dir
+from tools.project_path import data_dir
 
 data_file = os.path.join(data_dir,'test_data.xlsx')
 
@@ -28,9 +28,11 @@ class ReadExcel:
             row_data['title'] = self.sheet.cell(i,4).value
             row_data['method'] = self.sheet.cell(i,5).value
             test_data.append(row_data)
+        self.close_file()
         return test_data
 
-
-data = ReadExcel(data_file,'login').get_data()
-for item in data:
-    print(item)
+    def write_back_data(self,item,result):
+        self.open_file()
+        self.sheet.cell(item,6).value = result
+        self.workbook.save(self.file_name)
+        self.close_file()

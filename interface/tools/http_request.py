@@ -2,14 +2,14 @@ import requests
 
 class HttpRequest:
 
-    def http_request(self,url,data,http_method,header=None,cookie=None):
-
+    @staticmethod
+    def http_request(url,data,method,header=None,cookie=None):
         try:
-            if http_method.upper == "GET":
+            if method.upper() == "GET":
                 res = requests.get(url,data,headers=header,cookies=cookie)
-            elif http_method.upper == "POST":
+            elif method.upper() == "POST":
                 res = requests.post(url,data,headers=header,cookies=cookie)
-            elif http_method.upper == "PUT":
+            elif method.upper() == "PUT":
                 res = requests.put(url,data,headers=header,cookies=cookie)
             else:
                 print("请求方式错误，请检查！")
