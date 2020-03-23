@@ -30,7 +30,15 @@ def run(test_data):
         if res.cookies:
             setattr(GetCookie,'COOKIE',res.cookies)
         print('请求的结果是{0}'.format(res.json()))
-        ReadExcel(data_file,'recharge').write_back_data(item['case']+1,str(res.json()))
+        try:
+            assert str(item['expected']) == res.json()['code']
+            TestResult = 'pass'
+        except Exception as e:
+            TestResult = 'failed'
+            print('接口返回的数据为{}'.format(e))
+            raise e
+        finally:
+            ReadExcel(data_file,'recharge').write_back_data(item['case']+1,TestResult,str(res.json()))
 
 test_data = ReadExcel(data_file,'recharge').get_data()
 run(test_data)

@@ -27,12 +27,14 @@ class ReadExcel:
             row_data['data'] = self.sheet.cell(i,3).value
             row_data['title'] = self.sheet.cell(i,4).value
             row_data['method'] = self.sheet.cell(i,5).value
+            row_data['expected'] = self.sheet.cell(i,6).value
             test_data.append(row_data)
         self.close_file()
         return test_data
 
-    def write_back_data(self,item,result):
+    def write_back_data(self,item,TestResult,return_data):
         self.open_file()
-        self.sheet.cell(item,6).value = result
+        self.sheet.cell(item,7).value = TestResult
+        self.sheet.cell(item,8).value = return_data
         self.workbook.save(self.file_name)
         self.close_file()
