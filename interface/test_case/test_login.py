@@ -16,9 +16,6 @@ class TestLogin(unittest.TestCase):
     def setUp(self):
         pass
 
-    def tearDown(self):
-        pass
-
     @data(*test_data)
     def test_api(self,case_data):
         res = HttpRequest.http_request(case_data['url'],eval(case_data['data']),case_data['method'])
@@ -27,7 +24,10 @@ class TestLogin(unittest.TestCase):
             self.TestResult = 'PASS'
         except Exception as e:
             self.TestResult = 'Failed'
-            print('接口返回的信息是：{0}'.format(e))
+            print('执行用例出错：{0}'.format(e))
             raise e
         finally:
             ReadExcel(data_file,'login').write_back_data(case_data['case']+1,self.TestResult,str(res.json()))
+
+    def tearDown(self):
+        pass
