@@ -21,4 +21,5 @@ class ReadConfig:
     def write_back_data(self,option,section,value):
         """写入配置文件数据"""
         self.conf.set(option,section,value)
-        self.conf.write(open(config_file,'w',encoding='utf-8'))
+        with open(config_file,'w',encoding='utf-8') as file:
+            self.conf.write(file)

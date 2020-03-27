@@ -11,7 +11,7 @@ class ReadExcel:
     def __init__(self,file_name,sheet_name):
         self.file_name = file_name
         self.sheet_name = sheet_name
-        self.mode = eval(ReadConfig().read_config('MODE','mode'))
+        self.case_limits = eval(ReadConfig().read_config('MODE',sheet_name))
     
     def open_file(self):
         self.workbook = load_workbook(self.file_name)
@@ -23,28 +23,26 @@ class ReadExcel:
     def get_data(self):
         self.open_file()
         test_data = []
-        for key in self.mode:
-            self.sheet = self.workbook[key]
-            if self.mode[key] == 'all':
-                for i in range(2,self.sheet.max_row+1):
-                    row_data = {}
-                    row_data['case'] = self.sheet.cell(i,1).value
-                    row_data['url'] = self.sheet.cell(i,2).value
-                    row_data['data'] = self.sheet.cell(i,3).value
-                    row_data['title'] = self.sheet.cell(i,4).value
-                    row_data['method'] = self.sheet.cell(i,5).value
-                    row_data['expected'] = self.sheet.cell(i,6).value
-                    test_data.append(row_data)
-            else:
-                for i in self.mode[key]:
-                    row_data = {}
-                    row_data['case'] = self.sheet.cell(i+1, 1).value
-                    row_data['url'] = self.sheet.cell(i+1, 2).value
-                    row_data['data'] = self.sheet.cell(i+1, 3).value
-                    row_data['title'] = self.sheet.cell(i+1, 4).value
-                    row_data['method'] = self.sheet.cell(i+1, 5).value
-                    row_data['expected'] = self.sheet.cell(i+1, 6).value
-                    test_data.append(row_data)
+        if self.case_limits == 'all':
+            for i in range(2,self.sheet.max_row+1):
+                row_data = {}
+                row_data['case'] = self.sheet.cell(i,1).value
+                row_data['url'] = self.sheet.cell(i,2).value
+                row_data['data'] = self.sheet.cell(i,3).value
+                row_data['title'] = self.sheet.cell(i,4).value
+                row_data['method'] = self.sheet.cell(i,5).value
+                row_data['expected'] = self.sheet.cell(i,6).value
+                test_data.append(row_data)
+        else:
+            for i in self.case_limits:
+                row_data = {}
+                row_data['case'] = self.sheet.cell(i+1, 1).value
+                row_data['url'] = self.sheet.cell(i+1, 2).value
+                row_data['data'] = self.sheet.cell(i+1, 3).value
+                row_data['title'] = self.sheet.cell(i+1, 4).value
+                row_data['method'] = self.sheet.cell(i+1, 5).value
+                row_data['expected'] = self.sheet.cell(i+1, 6).value
+                test_data.append(row_data)
         self.close_file()
         return test_data
 
@@ -56,5 +54,5 @@ class ReadExcel:
         self.close_file()
 
 if __name__ == '__main__':
-    data = ReadExcel(data_file,'register').get_data()
+    data = ReadExcel(data_file,'recharge').get_data()
     print(len(data))
